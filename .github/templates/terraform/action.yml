@@ -33,4 +33,11 @@ runs:
         terraform --version
       name: 'Environment: Sort'
       shell: bash
-  
+    - name: 'Terraform: Init'
+      shell: bash
+      id: init
+      run: terraform -chdir=${{ env.tf_working_dir }} init
+    - name: 'Terraform: Plan'
+      shell: bash
+      id: plan
+      run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ env.environment }}.tfvars -out=tf${{ env.environment }}.plan
