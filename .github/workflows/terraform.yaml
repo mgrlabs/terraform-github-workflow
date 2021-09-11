@@ -1,4 +1,4 @@
-name: Terraform IaC
+name: Node.js CI
 
 on:
   push:
@@ -13,14 +13,16 @@ jobs:
 
     strategy:
       matrix:
-        environment: ["dev", "test", "prod"]
+        node-version: [12.x, 14.x, 16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v2
-    - uses: hashicorp/setup-terraform@v1
-      name: 'Terraform: Pin Version'
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
       with:
-        terraform_version: 1.0.5
-    - run: |
-        echo ${{ matrix.environment }}
-        terraform --version
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
