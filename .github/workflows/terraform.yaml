@@ -231,7 +231,7 @@ jobs:
 
   deploy_test:
     name: Deploy to Test 
-    needs: plan_test, deploy_dev
+    needs: [plan_test, deploy_dev]
     runs-on: ubuntu-latest
     environment: 
       name: test
@@ -245,7 +245,7 @@ jobs:
 
   deploy_prod:
     name: Deploy to Prod 
-    needs: plan_prod, deploy_test
+    needs: [plan_prod, deploy_test]
     runs-on: ubuntu-latest
     environment: 
       name: prod
