@@ -64,7 +64,12 @@ jobs:
       run: terraform -chdir=${{ env.tf_working_dir }} init
 
     - name: 'Terraform: Plan'
+      id: plan
       run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ matrix.env }}.tfvars -out=tf${{ matrix.env }}.plan
+
+    - run: echo ${{ steps.plan.outputs.stdout }}
+    - run: echo ${{ steps.plan.outputs.stderr }}
+    - run: echo ${{ steps.plan.outputs.exitcode }}
 
     - name: 'GitHub: Upload Terraform Plan'
       uses: actions/upload-artifact@v2
