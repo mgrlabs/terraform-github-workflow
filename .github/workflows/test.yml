@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - id: myCompositeAction
-      uses: ./.github/actions
+      uses: ./.github/templates/terraform
       with:
         destinationFolder: '/whatever/folder'
     # - id: myCompositeAction
