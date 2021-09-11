@@ -34,28 +34,28 @@ jobs:
         keyvault: 'kv-dev-mgrlabstf'
         secrets: 'automationClientSecret, automationClientId, subscriptionId'
       id: azureKeyVault
-    - name: Azure CLI script
+    - name: 'Azure: Logout'
       uses: azure/CLI@v1
       with:
-        # azcliversion: 2.0.72
         inlineScript: |
           az logout
           az cache purge
           az account clear
+
     - uses: hashicorp/setup-terraform@v1
       name: 'Terraform: Download v${{ env.tf_version }}'
       with:
         terraform_version: ${{ env.tf_version }}
-
     - run: |
         echo "ARM_CLIENT_ID=${{ steps.azureKeyVault.outputs.automationClientId }}" >> $GITHUB_ENV
         echo "ARM_CLIENT_SECRET=${{ steps.azureKeyVault.outputs.automationClientSecret }}" >> $GITHUB_ENV
         echo "ARM_SUBSCRIPTION_ID=${{ steps.azureKeyVault.outputs.subscriptionId }}" >> $GITHUB_ENV
         echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+
     - run: env | sort
 
-    # - name: 'Terraform: Init'
-    #   run: terraform -chdir=${{ env.tf_working_dir }} init
+    - name: 'Terraform: Init'
+      run: terraform -chdir=${{ env.tf_working_dir }} init
 
-    # - name: 'Terraform: Plan'
-    #   run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ matrix.env }}.tfvars
+    - name: 'Terraform: Plan'
+      run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ matrix.env }}.tfvars
