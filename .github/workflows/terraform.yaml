@@ -56,7 +56,7 @@ jobs:
         echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
 
     - uses: hashicorp/setup-terraform@v1
-      name: 'Terraform: Download Specific Version'
+      name: 'Terraform: Version Pin'
       with:
         terraform_version: ${{ env.tf_version }}
     
@@ -66,7 +66,17 @@ jobs:
     - name: 'Terraform: Plan'
       run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ matrix.env }}.tfvars -out=tf${{ matrix.env }}.plan
 
-    - uses: actions/upload-artifact@v2
+    - name: 'GitHub: Upload Terraform Plan'
+      uses: actions/upload-artifact@v2
       with:
         name: ${{ matrix.env }}_plan
         path: ${{ env.tf_working_dir }}/tf${{ matrix.env }}.plan
+
+  DeployDev:
+    name: Deploy to Dev 
+    runs-on: ubuntu-latest
+    environment: 
+      name: dev
+    steps:
+      - name: Deploy
+        run: echo I am deploying!
