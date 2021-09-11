@@ -21,7 +21,7 @@ runs:
     #     echo "ARM_CLIENT_SECRET=${{ steps.azureKeyVault.outputs.automationClientSecret }}" >> $GITHUB_ENV
     #     echo "ARM_SUBSCRIPTION_ID=${{ steps.azureKeyVault.outputs.subscriptionId }}" >> $GITHUB_ENV
     #     echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
-      shell: bash
+      # shell: bash
     - uses: hashicorp/setup-terraform@v1
       name: 'Terraform: Version Pin'
       with:
