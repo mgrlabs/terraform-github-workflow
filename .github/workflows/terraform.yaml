@@ -216,7 +216,7 @@ jobs:
   ###################################
 
   deploy_dev:
-    name: Deploy to Dev 
+    name: 'Apply: Dev'
     needs: plan_dev
     runs-on: ubuntu-latest
     environment: 
@@ -230,7 +230,7 @@ jobs:
   ###################################
 
   deploy_test:
-    name: Deploy to Test 
+    name: 'Apply: Test'
     needs: [plan_test, deploy_dev]
     runs-on: ubuntu-latest
     environment: 
@@ -244,7 +244,7 @@ jobs:
   ###################################
 
   deploy_prod:
-    name: Deploy to Prod 
+    name: 'Apply: Prod' 
     needs: [plan_prod, deploy_test]
     runs-on: ubuntu-latest
     environment: 
