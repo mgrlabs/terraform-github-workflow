@@ -31,5 +31,6 @@ jobs:
       uses: ./.github/templates/terraform
       with:
         tenantId: ${{ secrets.AZURE_TENANT_ID }}
+        environment: 'dev'
     - run: echo Files copied ${{ steps.myCompositeAction.outputs.copied-files }} 
       shell: bash

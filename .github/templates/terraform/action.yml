@@ -4,6 +4,9 @@ inputs:
   tenantId:  # path
     description: 'The environment to deploy to'
     required: true
+  environment:  # path
+    description: 'The environment to deploy to'
+    required: true
 outputs:
   copied-files: 
     description: "Number of files copied"
@@ -40,4 +43,4 @@ runs:
     - name: 'Terraform: Plan'
       shell: bash
       id: plan
-      run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ env.environment }}.tfvars -out=tf${{ env.environment }}.plan
+      run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ inputs.environment }}.tfvars -out=tf${{ inputs.environment }}.plan
