@@ -1,15 +1,15 @@
-name: 'File Copy'
-description: 'Pretends to copy some files and return the number of files copied'
+name: 'Terraform Workflow'
+description: 'Terraform Init, Plan, Apply workflow'
 inputs:
   tenantId:
-    description: 'The environment to deploy to'
     required: true
   environment:
-    description: 'The environment to deploy to'
     required: true
   azureCredentials:
-    description: 'The environment to deploy to'
     required: true
+  terraformApply:
+    required: true
+    default: 'false'
 outputs:
   copied-files: 
     description: "Number of files copied"
@@ -58,3 +58,8 @@ runs:
       with:
         name: ${{ inputs.environment }}_plan
         path: ${{ env.tf_working_dir }}/tf${{ inputs.environment }}.plan
+
+    - run: echo "You can't see me"
+      if: ${{ inputs.environment }} == 'true'
+      id: test
+      shell: bash

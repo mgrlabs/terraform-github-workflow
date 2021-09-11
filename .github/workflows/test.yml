@@ -14,18 +14,6 @@ jobs:
     name: Terraform Plan - Dev
     steps:
     - uses: actions/checkout@v2
-    # - uses: azure/login@v1
-    #   name: 'Azure: Login'
-    #   with:
-    #     creds: ${{ secrets.AZURE_CREDENTIALS }}
-    
-    # # Download the required secrets
-    # - name: 'Azure: Get Secrets'
-    #   uses: Azure/get-keyvault-secrets@v1
-    #   with:
-    #     keyvault: 'kv-dev-mgrlabstf'
-    #     secrets: 'automationClientSecret, automationClientId, subscriptionId'
-    #   id: azureKeyVault
     - id: terraformPlan
       name: 'Terraform Workflow'
       uses: ./.github/templates/terraform
@@ -33,5 +21,4 @@ jobs:
         azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
         tenantId: ${{ secrets.AZURE_TENANT_ID }}
         environment: 'dev'
-    - run: echo Files copied ${{ steps.myCompositeAction.outputs.copied-files }} 
-      shell: bash
+
