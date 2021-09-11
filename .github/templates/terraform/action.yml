@@ -1,10 +1,13 @@
 name: 'File Copy'
 description: 'Pretends to copy some files and return the number of files copied'
 inputs:
-  tenantId:  # path
+  tenantId:
     description: 'The environment to deploy to'
     required: true
-  environment:  # path
+  environment:
+    description: 'The environment to deploy to'
+    required: true
+  azureCredentials:
     description: 'The environment to deploy to'
     required: true
 outputs:
@@ -14,17 +17,26 @@ outputs:
 runs:
   using: "composite"
   steps: 
-    - id: random-number-generator
-      run: echo "::set-output name=filesNo::$(echo $RANDOM)"
-      shell: bash
+    - uses: azure/login@v1
+      name: 'Azure: Login'
+      with:
+        creds: ${{ inputs.azureCredentials }}
+    
+    # Download the required secrets
+    - name: 'Azure: Get Secrets'
+      uses: Azure/get-keyvault-secrets@v1
+      with:
+        keyvault: 'kv-dev-mgrlabstf'
+        secrets: 'automationClientSecret, automationClientId, subscriptionId'
+      id: azureKeyVault
 
     - name: 'Terraform: Setup Authentication'
+      shell: bash
       run: |
         echo "ARM_CLIENT_ID=$automationClientId" >> $GITHUB_ENV
         echo "ARM_CLIENT_SECRET=$automationClientSecret" >> $GITHUB_ENV
         echo "ARM_SUBSCRIPTION_ID=$subscriptionId" >> $GITHUB_ENV
         echo "ARM_TENANT_ID=${{ inputs.tenantId }}" >> $GITHUB_ENV
-      shell: bash
 
     - uses: hashicorp/setup-terraform@v1
       name: 'Terraform: Version Pin'
