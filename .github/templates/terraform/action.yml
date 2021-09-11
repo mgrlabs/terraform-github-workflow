@@ -14,13 +14,13 @@ runs:
     - id: random-number-generator
       run: echo "::set-output name=filesNo::$(echo $RANDOM)"
       shell: bash
-    # - name: 'Terraform: Setup Authentication'
-    #   run: |
-    #     echo "ARM_CLIENT_ID=${{ steps.azureKeyVault.outputs.automationClientId }}" >> $GITHUB_ENV
-    #     echo "ARM_CLIENT_SECRET=${{ steps.azureKeyVault.outputs.automationClientSecret }}" >> $GITHUB_ENV
-    #     echo "ARM_SUBSCRIPTION_ID=${{ steps.azureKeyVault.outputs.subscriptionId }}" >> $GITHUB_ENV
-    #     echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
-      # shell: bash
+    - name: 'Terraform: Setup Authentication'
+      run: |
+        echo "ARM_CLIENT_ID=$automationClientId" >> $GITHUB_ENV
+        echo "ARM_CLIENT_SECRET=$automationClientSecret" >> $GITHUB_ENV
+        echo "ARM_SUBSCRIPTION_ID=$subscriptionId" >> $GITHUB_ENV
+        echo "ARM_TENANT_ID=${{ inputs.tenantId }}" >> $GITHUB_ENV
+      shell: bash
     - uses: hashicorp/setup-terraform@v1
       name: 'Terraform: Version Pin'
       with:
