@@ -10,8 +10,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - id: myCompositeAction
-      uses: mgrlabs/composite-actions@v1 
+      uses: ./.github/actions/action
       with:
         destinationFolder: '/whatever/folder'
+    # - id: myCompositeAction
+    #   uses: mgrlabs/composite-actions@v1 
+    #   with:
+    #     destinationFolder: '/whatever/folder'
     - run: echo Files copied ${{ steps.myCompositeAction.outputs.copied-files }} 
       shell: bash
