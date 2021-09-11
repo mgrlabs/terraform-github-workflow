@@ -22,10 +22,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      name: 'Code: Checkout'
+      name: 'Code - Checkout'
     - uses: hashicorp/setup-terraform@v1
-      name: Terraform Download ${{ env.tf_version }}
+      name: Terraform - Download ${{ env.tf_version }}
       with:
         terraform_version: ${{ env.tf_version }}
-    - name: Terraform Plan ${{ matrix.environment }}
+    - name: Terraform - Plan ${{ matrix.env }}
       run: terraform --version
