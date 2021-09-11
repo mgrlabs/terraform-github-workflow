@@ -1,0 +1,31 @@
+name: Test Pipeline
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  runner: 'ubuntu-latest'
+  tf_version: '1.0.6'
+  tf_working_dir: 'infra'
+
+
+jobs:
+
+  ###################################
+  # Terraform: Plan Dev
+  ###################################
+  
+  plan_dev:
+    name: 'Plan: Dev'
+    runs-on: ubuntu-latest
+    env:
+      environment: 'dev'
+    using: "composite"
+    steps:
+    # Checkout the source code
+    - uses: ./.github/actions/action
+      name: 'Code: Checkout'
+    
