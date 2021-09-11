@@ -30,8 +30,6 @@ runs:
       name: 'Terraform: Version Pin'
       with:
         terraform_version: ${{ env.tf_version }}
-      name: 'Environment: Sort'
-      shell: bash
 
     - name: 'Terraform: Init'
       shell: bash
