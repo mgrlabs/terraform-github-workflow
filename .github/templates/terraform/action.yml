@@ -52,7 +52,7 @@ runs:
       run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ inputs.environment }}.tfvars -out=tf${{ inputs.environment }}.plan
 
     - shell: bash
-      id: plan
+      id: test
       run: |
         echo ${{ inputs.azureCredentials }} | jq -r '.clientId'
         # echo "ARM_TENANT_ID=${{ inputs.tenantId }}" >> $GITHUB_ENV jq -r '.clientId' mgrlabs-sp-cide.json
