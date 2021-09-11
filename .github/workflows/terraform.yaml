@@ -19,7 +19,8 @@ jobs:
     strategy:
       matrix:
         env: [dev, test, prod]
-
+    env:
+      TF_VARS_environment:  ${{ matrix.env }}
     steps:
     - uses: actions/checkout@v2
       name: 'Code: Checkout'
@@ -27,14 +28,22 @@ jobs:
       name: 'Azure: Login "${{ matrix.env }}" Environment'
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+    - name: 'Azure: Download Terraform Credentials'
+      uses: gincher/azure-keyvault@v1
+      with:
+        keyVaultName: 'secrets'
+        secretsFilter: 'TF_VAR_*'
     - uses: hashicorp/setup-terraform@v1
       name: 'Terraform: Download v${{ env.tf_version }}'
       with:
         terraform_version: ${{ env.tf_version }}
 
-    - name: 'Terraform: Init'
-      run: terraform -chdir=${{ env.tf_working_dir }} init
+    - run: echo "test_me=can_you_see_me" >> $GITHUB_ENV
+    - run: echo ${{ env.test_me }}
+    - run: env | sort
 
-    - name: 'Terraform: Plan'
-      run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ matrix.env }}.tfvars
+    # - name: 'Terraform: Init'
+    #   run: terraform -chdir=${{ env.tf_working_dir }} init
+
+    # - name: 'Terraform: Plan'
+    #   run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ matrix.env }}.tfvars

@@ -10,6 +10,11 @@ terraform {
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
   features {}
+
+  subscription_id = var.subscription_id
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  tenant_id       = var.tenant_id
 }
 
 resource "azurerm_resource_group" "example" {
@@ -18,6 +23,26 @@ resource "azurerm_resource_group" "example" {
 }
 
 variable environment {
+  type        = string
+  description = "description"
+}
+
+variable subscription_id {
+  type        = string
+  description = "description"
+}
+
+variable client_id {
+  type        = string
+  description = "description"
+}
+
+variable client_secret {
+  type        = string
+  description = "description"
+}
+
+variable tenant_id {
   type        = string
   description = "description"
 }
