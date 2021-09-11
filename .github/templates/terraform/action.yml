@@ -17,6 +17,7 @@ runs:
     - id: random-number-generator
       run: echo "::set-output name=filesNo::$(echo $RANDOM)"
       shell: bash
+
     - name: 'Terraform: Setup Authentication'
       run: |
         echo "ARM_CLIENT_ID=$automationClientId" >> $GITHUB_ENV
@@ -24,23 +25,26 @@ runs:
         echo "ARM_SUBSCRIPTION_ID=$subscriptionId" >> $GITHUB_ENV
         echo "ARM_TENANT_ID=${{ inputs.tenantId }}" >> $GITHUB_ENV
       shell: bash
+
     - uses: hashicorp/setup-terraform@v1
       name: 'Terraform: Version Pin'
       with:
         terraform_version: ${{ env.tf_version }}
-    - run: env | sort
       name: 'Environment: Sort'
       shell: bash
-    - run: | 
-        echo ${{ inputs.tenantId }}
-        terraform --version
-      name: 'Environment: Sort'
-      shell: bash
+
     - name: 'Terraform: Init'
       shell: bash
       id: init
       run: terraform -chdir=${{ env.tf_working_dir }} init
+
     - name: 'Terraform: Plan'
       shell: bash
       id: plan
       run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ inputs.environment }}.tfvars -out=tf${{ inputs.environment }}.plan
+
+    - name: 'GitHub: Upload Terraform Plan'
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.environment }}_plan
+        path: ${{ env.tf_working_dir }}/tf${{ inputs.environment }}.plan
