@@ -147,7 +147,7 @@ jobs:
         path: ${{ env.tf_working_dir }}/tf${{ env.environment }}.plan
 
   ###################################
-  # Terraform: Plan Dev
+  # Terraform: Plan Prod
   ###################################
 
   plan_prod:
@@ -215,7 +215,7 @@ jobs:
   # Terraform: Apply Dev
   ###################################
 
-  DeployDev:
+  deploy_dev:
     name: Deploy to Dev 
     needs: plan_dev
     runs-on: ubuntu-latest
@@ -229,9 +229,9 @@ jobs:
   # Terraform: Apply Test
   ###################################
 
-  DeployTest:
+  deploy_test:
     name: Deploy to Test 
-    needs: plan_test
+    needs: plan_test, deploy_dev
     runs-on: ubuntu-latest
     environment: 
       name: test
@@ -243,9 +243,9 @@ jobs:
   # Terraform: Apply Prod
   ###################################
 
-  DeployProd:
+  deploy_prod:
     name: Deploy to Prod 
-    needs: plan_prod
+    needs: plan_prod, deploy_test
     runs-on: ubuntu-latest
     environment: 
       name: prod
