@@ -7,7 +7,6 @@ on:
     branches: [ master ]
 
 env:
-  prod_env: [dev, test, prod]
   runner: 'ubuntu-latest'
   tf_version: '1.0.6'
   tf_working_dir: 'infra'
@@ -19,22 +18,27 @@ jobs:
 
     strategy:
       matrix:
-        env: ${{ env.prod_env }}
-    # env:
-    #   TF_VARS_environment:  ${{ matrix.env }}
+        env: [dev, test, prod]
     steps:
+    # Checkout the source code
     - uses: actions/checkout@v2
       name: 'Code: Checkout'
+    
+    # Log into Azure using the Service Principal store in GitHub secrets
     - uses: azure/login@v1
       name: 'Azure: Login'
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Download the required secrets
     - name: 'Azure: Get Secrets'
       uses: Azure/get-keyvault-secrets@v1
       with:
         keyvault: 'kv-dev-mgrlabstf'
         secrets: 'automationClientSecret, automationClientId, subscriptionId'
       id: azureKeyVault
+    
+    # Explicitly log out of Azure CLI
     - name: 'Azure: Logout'
       uses: azure/CLI@v1
       with:
@@ -42,11 +46,8 @@ jobs:
           az logout
           az cache purge
           az account clear
-
-    - uses: hashicorp/setup-terraform@v1
-      name: 'Terraform: Download v${{ env.tf_version }}'
-      with:
-        terraform_version: ${{ env.tf_version }}
+    
+    # Terraform Plan Steps
     - name: 'Terraform: Setup Authentication'
       run: |
         echo "ARM_CLIENT_ID=${{ steps.azureKeyVault.outputs.automationClientId }}" >> $GITHUB_ENV
@@ -54,6 +55,11 @@ jobs:
         echo "ARM_SUBSCRIPTION_ID=${{ steps.azureKeyVault.outputs.subscriptionId }}" >> $GITHUB_ENV
         echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
 
+    - uses: hashicorp/setup-terraform@v1
+      name: 'Terraform: Download Specific Version'
+      with:
+        terraform_version: ${{ env.tf_version }}
+    
     - name: 'Terraform: Init'
       run: terraform -chdir=${{ env.tf_working_dir }} init
 
