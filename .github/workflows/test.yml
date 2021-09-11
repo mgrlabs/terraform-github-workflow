@@ -3,6 +3,11 @@ name: Composite Example
 
 on: [workflow_dispatch]
 
+env:
+  runner: 'ubuntu-latest'
+  tf_version: '1.0.6'
+  tf_working_dir: 'infra'
+
 jobs:
   copy_files_job:
     runs-on: ubuntu-latest
