@@ -13,12 +13,14 @@ env:
 
 
 jobs:
-  Plan:
+  plan_dev:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        env: [dev, test, prod]
+    # strategy:
+    #   matrix:
+    #     env: [dev, test, prod]
+    env:
+      environment: 'dev'
     steps:
     # Checkout the source code
     - uses: actions/checkout@v2
@@ -34,7 +36,7 @@ jobs:
     - name: 'Azure: Get Secrets'
       uses: Azure/get-keyvault-secrets@v1
       with:
-        keyvault: 'kv-dev-mgrlabstf'
+        keyvault: 'kv-${{ env.environment }}-mgrlabstf'
         secrets: 'automationClientSecret, automationClientId, subscriptionId'
       id: azureKeyVault
     
@@ -61,25 +63,22 @@ jobs:
         terraform_version: ${{ env.tf_version }}
     
     - name: 'Terraform: Init'
+      id: init
       run: terraform -chdir=${{ env.tf_working_dir }} init
 
     - name: 'Terraform: Plan'
       id: plan
-      run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ matrix.env }}.tfvars -out=tf${{ matrix.env }}.plan
-
-    - run: echo ${{ steps.plan.outputs.stdout }}
-    - run: echo ${{ steps.plan.outputs.stderr }}
-    - run: echo ${{ steps.plan.outputs.exitcode }}
+      run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ env.environment }}.tfvars -out=tf${{ env.environment }}.plan
 
     - name: 'GitHub: Upload Terraform Plan'
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ matrix.env }}_plan
-        path: ${{ env.tf_working_dir }}/tf${{ matrix.env }}.plan
+        name: ${{ env.environment }}_plan
+        path: ${{ env.tf_working_dir }}/tf${{ env.environment }}.plan
 
   DeployDev:
     name: Deploy to Dev 
-    needs: Plan
+    needs: plan_dev
     runs-on: ubuntu-latest
     environment: 
       name: dev
