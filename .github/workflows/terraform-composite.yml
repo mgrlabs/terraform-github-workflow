@@ -11,6 +11,8 @@ env:
 jobs:
   planDev:
     runs-on: ubuntu-latest
+    env:
+      environment: 'dev'
     name: Terraform Plan - Dev
     steps:
     - uses: actions/checkout@v2
@@ -20,5 +22,3 @@ jobs:
       with:
         azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
         tenantId: ${{ secrets.AZURE_TENANT_ID }}
-        environment: 'dev'
-

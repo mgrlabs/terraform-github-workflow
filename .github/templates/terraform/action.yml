@@ -1,4 +1,4 @@
-name: 'Terraform Workflow'
+name: 'Terraform Plan'
 description: 'Terraform Init, Plan, Apply workflow'
 inputs:
   tenantId:
@@ -7,16 +7,14 @@ inputs:
     required: true
   azureCredentials:
     required: true
-  terraformApply:
-    required: true
-    default: 'false'
-outputs:
-  copied-files: 
-    description: "Number of files copied"
-    value: ${{ steps.random-number-generator.outputs.filesNo }}
+# outputs:
+#   copied-files: 
+#     description: "Number of files copied"
+#     value: ${{ steps.random-number-generator.outputs.filesNo }}
 runs:
   using: "composite"
-  steps: 
+  steps:
+
     - uses: azure/login@v1
       name: 'Azure: Login'
       with:
@@ -53,13 +51,14 @@ runs:
       id: plan
       run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ inputs.environment }}.tfvars -out=tf${{ inputs.environment }}.plan
 
+    - shell: bash
+      id: plan
+      run: |
+        echo ${{ inputs.azureCredentials }} | jq -r '.clientId'
+        # echo "ARM_TENANT_ID=${{ inputs.tenantId }}" >> $GITHUB_ENV jq -r '.clientId' mgrlabs-sp-cide.json
+
     - name: 'GitHub: Upload Terraform Plan'
       uses: actions/upload-artifact@v2
       with:
         name: ${{ inputs.environment }}_plan
         path: ${{ env.tf_working_dir }}/tf${{ inputs.environment }}.plan
-
-    - run: echo "You can't see me"
-      if: ${{ inputs.environment }} == 'true'
-      id: test
-      shell: bash

@@ -1,11 +1,11 @@
 name: Terraform IaC
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
+# on:
+#   push:
+#     branches: [ master ]
+#   pull_request:
+#     branches: [ master ]
+on: [workflow_dispatch]
 env:
   runner: 'ubuntu-latest'
   tf_version: '1.0.6'
