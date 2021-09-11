@@ -54,7 +54,7 @@ runs:
     - shell: bash
       id: test
       run: |
-        echo ${{ inputs.azureCredentials }} | jq -r '.clientId'
+        echo "${{ inputs.azureCredentials }}" | jq -r '.clientId'
         # echo "ARM_TENANT_ID=${{ inputs.tenantId }}" >> $GITHUB_ENV jq -r '.clientId' mgrlabs-sp-cide.json
 
     - name: 'GitHub: Upload Terraform Plan'
