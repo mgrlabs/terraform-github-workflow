@@ -1,31 +1,17 @@
-name: Test Pipeline
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+name: Composite Example
 
-env:
-  runner: 'ubuntu-latest'
-  tf_version: '1.0.6'
-  tf_working_dir: 'infra'
-
+on: [workflow_dispatch]
 
 jobs:
-
-  ###################################
-  # Terraform: Plan Dev
-  ###################################
-  
-  plan_dev:
-    name: 'Plan: Dev'
+  copy_files_job:
     runs-on: ubuntu-latest
-    env:
-      environment: 'dev'
-    using: "composite"
+    name: A job that copy files
     steps:
-    # Checkout the source code
-    - uses: ./.github/actions/action
-      name: 'Code: Checkout'
-    
+    - uses: actions/checkout@v2
+    - id: myCompositeAction
+      uses: mgrlabs/composite-actions@v1 
+      with:
+        destinationFolder: '/whatever/folder'
+    - run: echo Files copied ${{ steps.myCompositeAction.outputs.copied-files }} 
+      shell: bash
