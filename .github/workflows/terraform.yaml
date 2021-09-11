@@ -150,12 +150,12 @@ jobs:
   # Terraform: Plan Dev
   ###################################
 
-  plan_dev:
-    name: 'Plan: Dev'
+  plan_prod:
+    name: 'Plan: Prod'
     runs-on: ubuntu-latest
 
     env:
-      environment: 'dev'
+      environment: 'prod'
     steps:
     # Checkout the source code
     - uses: actions/checkout@v2
@@ -231,7 +231,7 @@ jobs:
 
   DeployTest:
     name: Deploy to Test 
-    needs: DeployDev
+    needs: plan_test
     runs-on: ubuntu-latest
     environment: 
       name: test
@@ -245,7 +245,7 @@ jobs:
 
   DeployProd:
     name: Deploy to Prod 
-    needs: DeployTest
+    needs: plan_prod
     runs-on: ubuntu-latest
     environment: 
       name: prod
