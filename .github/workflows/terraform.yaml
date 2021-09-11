@@ -19,13 +19,13 @@ jobs:
     strategy:
       matrix:
         env: [dev, test, prod]
-    env:
-      TF_VARS_environment:  ${{ matrix.env }}
+    # env:
+    #   TF_VARS_environment:  ${{ matrix.env }}
     steps:
     - uses: actions/checkout@v2
       name: 'Code: Checkout'
     - uses: azure/login@v1
-      name: 'Azure: Login "${{ matrix.env }}" Environment'
+      name: 'Azure: Login'
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: 'Azure: Download Terraform Credentials'
