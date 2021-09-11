@@ -33,13 +33,17 @@ jobs:
       with:
         keyvault: 'kv-${{ matrix.env }}-mgrlabstf '
         secrets: 'automationClientSecret, automationClientId, subscriptionId'
+      id: azureKeyVault
     - uses: hashicorp/setup-terraform@v1
       name: 'Terraform: Download v${{ env.tf_version }}'
       with:
         terraform_version: ${{ env.tf_version }}
 
-    - run: echo "test_me=can_you_see_me" >> $GITHUB_ENV
-    - run: echo ${{ env.test_me }}
+    - run: |
+        echo "ARM_CLIENT_ID=${{ steps.azureKeyVault.outputs.automationClientId }}" >> $GITHUB_ENV
+        echo "ARM_CLIENT_SECRET=${{ steps.azureKeyVault.outputs.automationClientSecret }}" >> $GITHUB_ENV
+        echo "ARM_SUBSCRIPTION_ID=${{ steps.azureKeyVault.outputs.subscriptionId }}" >> $GITHUB_ENV
+        echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
     - run: env | sort
 
     # - name: 'Terraform: Init'
