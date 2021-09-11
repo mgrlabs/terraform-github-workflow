@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Terraform IaC
 
 on:
   push:
@@ -7,24 +7,25 @@ on:
     branches: [ master ]
 
 env:
+  runner: 'ubuntu-latest'
   tf_version: '1.0.6'
+  tf_working_dir: 'infra'
+
 
 jobs:
   plan:
-
-    runs-on: ubuntu-latest
+    runs-on: ${{ env.runner }}
 
     strategy:
       matrix:
         env: [dev, test, prod]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v2
       name: 'Code: Checkout'
     - uses: hashicorp/setup-terraform@v1
-      name: 'Terraform: Download'
+      name: Terraform Download ${{ env.tf_version }}
       with:
         terraform_version: ${{ env.tf_version }}
-    - name: 'Terraform: Plan ${{ matrix.environment }}'
+    - name: Terraform Plan ${{ matrix.environment }}
       run: terraform --version
