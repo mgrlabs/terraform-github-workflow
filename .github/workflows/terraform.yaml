@@ -19,13 +19,16 @@ jobs:
     strategy:
       matrix:
         env: [dev, test, prod]
+        test: [1, 2, 3]
 
     steps:
     - uses: actions/checkout@v2
       name: 'Code - Checkout'
     - uses: hashicorp/setup-terraform@v1
-      name: Terraform - Download ${{ env.tf_version }}
+      name: Terraform - Download v${{ env.tf_version }}
       with:
         terraform_version: ${{ env.tf_version }}
     - name: Terraform - Plan ${{ matrix.env }}
-      run: terraform --version
+      run: |
+        terraform --version
+        echo ${{ matrix.test }}
