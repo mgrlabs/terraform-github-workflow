@@ -31,8 +31,8 @@ jobs:
     - name: 'Azure: Download Terraform Credentials'
       uses: Azure/get-keyvault-secrets@v1
       with:
-        keyVaultName: 'kv-${{ matrix.env }}-mgrlabstf '
-        secretsFilter: 'automationClientSecret, automationClientId, subscriptionId'
+        keyvault: 'kv-${{ matrix.env }}-mgrlabstf '
+        secrets: 'automationClientSecret, automationClientId, subscriptionId'
     - uses: hashicorp/setup-terraform@v1
       name: 'Terraform: Download v${{ env.tf_version }}'
       with:
