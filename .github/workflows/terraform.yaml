@@ -13,13 +13,12 @@ env:
 
 
 jobs:
-  plan:
+  TF_Plan:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         env: [dev, test, prod]
-        test: [1, 2, 3]
 
     steps:
     - uses: actions/checkout@v2
@@ -31,4 +30,3 @@ jobs:
     - name: Terraform - Plan ${{ matrix.env }}
       run: |
         terraform --version
-        echo ${{ matrix.test }}
