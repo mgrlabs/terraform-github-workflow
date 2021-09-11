@@ -6,6 +6,8 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  - tf_version: '1.0.6'
 jobs:
   plan:
 
@@ -18,8 +20,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      name: 'Code: Checkout'
     - uses: hashicorp/setup-terraform@v1
+      name: 'Terraform: Download'
       with:
-        terraform_version: 1.0.5
-    - name: Plan ${{ matrix.environment }}
+        terraform_version: ${{ env.tf_version }}
+    - name: 'Terraform: Plan ${{ matrix.environment }}'
       run: terraform --version
