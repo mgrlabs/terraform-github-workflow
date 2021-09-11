@@ -24,7 +24,7 @@ jobs:
     - id: terraformPlan
       name: 'Terraform Workflow'
       uses: ./.github/templates/terraform
-      # with:
-      #   destinationFolder: '/whatever/folder'
+      with:
+        tenantId: ${{ secrets.AZURE_TENANT_ID }}
     - run: echo Files copied ${{ steps.myCompositeAction.outputs.copied-files }} 
       shell: bash
