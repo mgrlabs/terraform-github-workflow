@@ -28,11 +28,11 @@ jobs:
       name: 'Azure: Login "${{ matrix.env }}" Environment'
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - name: 'Azure: Download Terraform Credentials'
-      uses: gincher/azure-keyvault@v1
-      with:
-        keyVaultName: 'kv-${{ matrix.env }}-mgrlabstf '
-        secretsFilter: ['automationClientSecret', 'automationClientId', 'subscriptionId']
+    # - name: 'Azure: Download Terraform Credentials'
+    #   uses: gincher/azure-keyvault@v1
+    #   with:
+    #     keyVaultName: 'kv-${{ matrix.env }}-mgrlabstf '
+    #     secretsFilter: 'automationClientSecret, automationClientId, subscriptionId'
     - uses: hashicorp/setup-terraform@v1
       name: 'Terraform: Download v${{ env.tf_version }}'
       with:
