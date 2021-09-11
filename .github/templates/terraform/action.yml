@@ -12,6 +12,10 @@ outputs:
 runs:
   using: "composite"
   steps: 
+    - uses: azure/login@v1
+      name: 'Azure: Login'
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
     - run: env | sort
       name: 'Environment: Sort'
       shell: bash
