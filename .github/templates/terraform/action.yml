@@ -49,7 +49,7 @@ runs:
     - name: 'Terraform: Plan'
       shell: bash
       id: plan
-      run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ inputs.environment }}.tfvars -out=tf${{ inputs.environment }}.plan
+      run: terraform -chdir=${{ env.tf_working_dir }} plan -var-file=env/${{ env.environment }}.tfvars -out=tf${{ env.environment }}.plan
 
     - shell: bash
       id: test
@@ -60,5 +60,5 @@ runs:
     - name: 'GitHub: Upload Terraform Plan'
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ inputs.environment }}_plan
-        path: ${{ env.tf_working_dir }}/tf${{ inputs.environment }}.plan
+        name: ${{ env.environment }}_plan
+        path: ${{ env.tf_working_dir }}/tf${{ env.environment }}.plan
