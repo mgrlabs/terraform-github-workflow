@@ -12,8 +12,7 @@ outputs:
 runs:
   using: "composite"
   steps: 
-    - run: echo ${{ github.action_path }}
-      shell: bash
+    - run: env | sort
     - id: random-number-generator
       run: echo "::set-output name=filesNo::$(echo $RANDOM)"
       shell: bash
