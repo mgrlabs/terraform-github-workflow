@@ -27,6 +27,6 @@ jobs:
       name: Terraform - Download v${{ env.tf_version }}
       with:
         terraform_version: ${{ env.tf_version }}
-    - name: Terraform - Plan ${{ matrix.env }}
+    - name: 'Terraform: Plan ${{ matrix.env }}'
       run: |
         terraform --version
