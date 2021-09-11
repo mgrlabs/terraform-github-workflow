@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 env:
-  environments: [dev, test, prod]
+  prod_env: [dev, test, prod]
   runner: 'ubuntu-latest'
   tf_version: '1.0.6'
   tf_working_dir: 'infra'
@@ -19,7 +19,7 @@ jobs:
 
     strategy:
       matrix:
-        env: ${{ env.environments }}
+        env: ${{ env.prod_env }}
     # env:
     #   TF_VARS_environment:  ${{ matrix.env }}
     steps:
