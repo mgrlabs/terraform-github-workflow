@@ -1,10 +1,9 @@
 name: 'File Copy'
 description: 'Pretends to copy some files and return the number of files copied'
 inputs:
-  environment:  # path
+  tenantId:  # path
     description: 'The environment to deploy to'
     required: true
-    default: 'dev'
 outputs:
   copied-files: 
     description: "Number of files copied"
@@ -27,6 +26,11 @@ runs:
       with:
         terraform_version: ${{ env.tf_version }}
     - run: env | sort
+      name: 'Environment: Sort'
+      shell: bash
+    - run: | 
+        echo ${{ inputs.tenantId }}
+        terraform --version
       name: 'Environment: Sort'
       shell: bash
   
