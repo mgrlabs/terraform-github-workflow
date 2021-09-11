@@ -9,26 +9,22 @@ jobs:
     name: A job that copy files
     steps:
     - uses: actions/checkout@v2
-    # - uses: azure/login@v1
-    #   name: 'Azure: Login'
-    #   with:
-    #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - uses: azure/login@v1
+      name: 'Azure: Login'
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # # Download the required secrets
-    # - name: 'Azure: Get Secrets'
-    #   uses: Azure/get-keyvault-secrets@v1
-    #   with:
-    #     keyvault: 'kv-dev-mgrlabstf'
-    #     secrets: 'automationClientSecret, automationClientId, subscriptionId'
-      # id: azureKeyVault
-    - id: myCompositeAction
+    # Download the required secrets
+    - name: 'Azure: Get Secrets'
+      uses: Azure/get-keyvault-secrets@v1
+      with:
+        keyvault: 'kv-dev-mgrlabstf'
+        secrets: 'automationClientSecret, automationClientId, subscriptionId'
+      id: azureKeyVault
+    - id: terraformPlan
       name: 'Terraform Workflow'
       uses: ./.github/templates/terraform
-      with:
-        destinationFolder: '/whatever/folder'
-    # - id: myCompositeAction
-    #   uses: mgrlabs/composite-actions@v1 
-    #   with:
-    #     destinationFolder: '/whatever/folder'
+      # with:
+      #   destinationFolder: '/whatever/folder'
     - run: echo Files copied ${{ steps.myCompositeAction.outputs.copied-files }} 
       shell: bash
