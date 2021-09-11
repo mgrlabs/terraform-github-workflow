@@ -81,3 +81,23 @@ jobs:
     steps:
       - name: Deploy
         run: echo I am deploying!
+
+  DeployTest:
+    name: Deploy to Test 
+    needs: DeployDev
+    runs-on: ubuntu-latest
+    environment: 
+      name: test
+    steps:
+      - name: Deploy
+        run: echo I am deploying!
+
+  DeployProd:
+    name: Deploy to Prod 
+    needs: DeployTest
+    runs-on: ubuntu-latest
+    environment: 
+      name: prod
+    steps:
+      - name: Deploy
+        run: echo I am deploying!
