@@ -7,6 +7,7 @@ on:
     branches: [ master ]
 
 env:
+  environments: [dev, test, prod]
   runner: 'ubuntu-latest'
   tf_version: '1.0.6'
   tf_working_dir: 'infra'
@@ -18,7 +19,7 @@ jobs:
 
     strategy:
       matrix:
-        env: [dev, test, prod]
+        env: ${{ env.environments }}
     # env:
     #   TF_VARS_environment:  ${{ matrix.env }}
     steps:
@@ -28,7 +29,7 @@ jobs:
       name: 'Azure: Login'
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - name: 'Azure: Download Terraform Credentials'
+    - name: 'Azure: Get Secrets'
       uses: Azure/get-keyvault-secrets@v1
       with:
         keyvault: 'kv-dev-mgrlabstf'
@@ -52,8 +53,6 @@ jobs:
         echo "ARM_CLIENT_SECRET=${{ steps.azureKeyVault.outputs.automationClientSecret }}" >> $GITHUB_ENV
         echo "ARM_SUBSCRIPTION_ID=${{ steps.azureKeyVault.outputs.subscriptionId }}" >> $GITHUB_ENV
         echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
-
-    - run: env | sort
 
     - name: 'Terraform: Init'
       run: terraform -chdir=${{ env.tf_working_dir }} init
