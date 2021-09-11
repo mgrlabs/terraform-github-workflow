@@ -44,5 +44,5 @@ runs:
     - name: 'GitHub: Upload Terraform Plan'
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ env.environment }}_plan
+        name: ${{ inputs.environment }}_plan
         path: ${{ env.tf_working_dir }}/tf${{ inputs.environment }}.plan

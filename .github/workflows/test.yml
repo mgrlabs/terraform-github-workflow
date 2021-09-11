@@ -1,5 +1,5 @@
 
-name: Composite Example
+name: Terraform - Composite
 
 on: [workflow_dispatch]
 
@@ -9,9 +9,9 @@ env:
   tf_working_dir: 'infra'
 
 jobs:
-  copy_files_job:
+  planDev:
     runs-on: ubuntu-latest
-    name: A job that copy files
+    name: Terraform Plan - Dev
     steps:
     - uses: actions/checkout@v2
     - uses: azure/login@v1
