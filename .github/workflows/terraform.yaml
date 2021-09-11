@@ -46,7 +46,8 @@ jobs:
       name: 'Terraform: Download v${{ env.tf_version }}'
       with:
         terraform_version: ${{ env.tf_version }}
-    - run: |
+    - name: 'Terraform: Setup Authentication'
+      run: |
         echo "ARM_CLIENT_ID=${{ steps.azureKeyVault.outputs.automationClientId }}" >> $GITHUB_ENV
         echo "ARM_CLIENT_SECRET=${{ steps.azureKeyVault.outputs.automationClientSecret }}" >> $GITHUB_ENV
         echo "ARM_SUBSCRIPTION_ID=${{ steps.azureKeyVault.outputs.subscriptionId }}" >> $GITHUB_ENV
